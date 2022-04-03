@@ -39,9 +39,9 @@ async function bootstrap() {
       saveUninitialized: true,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
-        secure: false,
+        secure: true,
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: 'none',
       },
     }),
   );
