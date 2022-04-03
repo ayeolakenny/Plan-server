@@ -1,0 +1,227 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type EventType {
+  id: ID!
+  title: String!
+  description: String!
+  length: Int!
+  User: User
+  userId: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AtendeeCount {
+  event: Int!
+}
+
+type Atendee {
+  id: ID!
+  name: String!
+  email: String!
+  event: [Event!]
+  _count: AtendeeCount!
+}
+
+type Event {
+  id: ID!
+  date: DateTime!
+  time: DateTime!
+  additionalNotes: String
+  Atendee: Atendee
+  atendeeId: Int
+  User: User
+  userId: Int
+}
+
+type UserCount {
+  eventTypes: Int!
+  event: Int!
+}
+
+type User {
+  id: ID!
+  email: String!
+  username: String!
+  password: String!
+  eventTypes: [EventType!]
+  event: [Event!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  _count: UserCount!
+}
+
+type Query {
+  findUserById(userId: Float!): User!
+  me: User
+  findUserEvents: [Event!]!
+  findUniqueEvent(eventId: Float!): Event!
+  findUserEventTypes: [EventType!]!
+}
+
+type Mutation {
+  register(input: UserCreateInput!): User!
+  login(input: LoginInput!): User!
+  logout: Boolean!
+  createEvent(input: CreateEventInput!): Event!
+  createEventType(input: EventTypesCreateInput!): EventType!
+}
+
+input UserCreateInput {
+  email: String!
+  username: String!
+  password: String!
+  eventTypes: EventTypeCreateNestedManyWithoutUserInput
+  event: EventCreateNestedManyWithoutUserInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input EventTypeCreateNestedManyWithoutUserInput {
+  create: [EventTypeCreateWithoutUserInput!]
+  connectOrCreate: [EventTypeCreateOrConnectWithoutUserInput!]
+  createMany: EventTypeCreateManyUserInputEnvelope
+  connect: [EventTypeWhereUniqueInput!]
+}
+
+input EventTypeCreateWithoutUserInput {
+  title: String!
+  description: String!
+  length: Int!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input EventTypeCreateOrConnectWithoutUserInput {
+  where: EventTypeWhereUniqueInput!
+  create: EventTypeCreateWithoutUserInput!
+}
+
+input EventTypeWhereUniqueInput {
+  id: Int
+}
+
+input EventTypeCreateManyUserInputEnvelope {
+  data: [EventTypeCreateManyUserInput!]!
+  skipDuplicates: Boolean
+}
+
+input EventTypeCreateManyUserInput {
+  id: Int
+  title: String!
+  description: String!
+  length: Int!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input EventCreateNestedManyWithoutUserInput {
+  create: [EventCreateWithoutUserInput!]
+  connectOrCreate: [EventCreateOrConnectWithoutUserInput!]
+  createMany: EventCreateManyUserInputEnvelope
+  connect: [EventWhereUniqueInput!]
+}
+
+input EventCreateWithoutUserInput {
+  date: DateTime!
+  time: DateTime!
+  additionalNotes: String
+  Atendee: AtendeeCreateNestedOneWithoutEventInput
+}
+
+input AtendeeCreateNestedOneWithoutEventInput {
+  create: AtendeeCreateWithoutEventInput
+  connectOrCreate: AtendeeCreateOrConnectWithoutEventInput
+  connect: AtendeeWhereUniqueInput
+}
+
+input AtendeeCreateWithoutEventInput {
+  name: String!
+  email: String!
+}
+
+input AtendeeCreateOrConnectWithoutEventInput {
+  where: AtendeeWhereUniqueInput!
+  create: AtendeeCreateWithoutEventInput!
+}
+
+input AtendeeWhereUniqueInput {
+  id: Int
+}
+
+input EventCreateOrConnectWithoutUserInput {
+  where: EventWhereUniqueInput!
+  create: EventCreateWithoutUserInput!
+}
+
+input EventWhereUniqueInput {
+  id: Int
+}
+
+input EventCreateManyUserInputEnvelope {
+  data: [EventCreateManyUserInput!]!
+  skipDuplicates: Boolean
+}
+
+input EventCreateManyUserInput {
+  id: Int
+  date: DateTime!
+  time: DateTime!
+  additionalNotes: String
+  atendeeId: Int
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateEventInput {
+  date: DateTime!
+  time: DateTime!
+  additionalNotes: String
+  attendeeName: String!
+  attendeeEmail: String!
+}
+
+input EventTypesCreateInput {
+  title: String!
+  description: String!
+  length: Int!
+  User: UserCreateNestedOneWithoutEventTypesInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input UserCreateNestedOneWithoutEventTypesInput {
+  create: UserCreateWithoutEventTypesInput
+  connectOrCreate: UserCreateOrConnectWithoutEventTypesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutEventTypesInput {
+  email: String!
+  username: String!
+  password: String!
+  event: EventCreateNestedManyWithoutUserInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input UserCreateOrConnectWithoutEventTypesInput {
+  where: UserWhereUniqueInput!
+  create: UserCreateWithoutEventTypesInput!
+}
+
+input UserWhereUniqueInput {
+  id: Int
+  email: String
+  username: String
+}

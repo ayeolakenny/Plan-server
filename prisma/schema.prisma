@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator nestgraphql {
+  provider               = "node node_modules/prisma-nestjs-graphql"
+  output                 = "../src/@generated/prisma-nestjs-graphql"
+  fields_Validator_from  = "class-validator"
+  fields_Validator_input = true
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  /// @Validator.IsEmail()
+  /// @Validator.IsNotEmpty()
+  email      String      @unique
+  /// @Validator.MinLength(2)
+  /// @Validator.IsString()
+  /// @Validator.IsNotEmpty()
+  username   String      @unique
+  /// @Validator.IsString()
+  /// @Validator.IsNotEmpty()
+  // @Validation.HideField({output: true})
+  password   String
+  eventTypes EventType[]
+  event      Event[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model EventType {
+  id          Int      @id @default(autoincrement())
+  /// @Validator.MinLength(2)
+  /// @Validator.IsString()
+  /// @Validator.IsNotEmpty()
+  title       String
+  /// @Validator.MinLength(2)
+  /// @Validator.IsString()
+  /// @Validator.IsNotEmpty()
+  description String
+  /// @Validator.IsNumber()
+  /// @Validator.IsNotEmpty()
+  length      Int
+  User        User?    @relation(fields: [userId], references: [id])
+  userId      Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Event {
+  id              Int      @id @default(autoincrement())
+  date            DateTime
+  time            DateTime
+  additionalNotes String?
+  Atendee         Atendee? @relation(fields: [atendeeId], references: [id])
+  atendeeId       Int?
+  User            User?    @relation(fields: [userId], references: [id])
+  userId          Int?
+}
+
+model Atendee {
+  id    Int     @id @default(autoincrement())
+  /// @Validator.MinLength(2)
+  /// @Validator.IsString()
+  /// @Validator.IsNotEmpty()
+  name  String
+  /// @Validator.MinLength(2)
+  /// @Validator.IsString()
+  /// @Validator.IsNotEmpty()
+  email String
+  event Event[]
+}
